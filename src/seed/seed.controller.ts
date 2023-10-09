@@ -9,8 +9,8 @@ export class SeedController {
   
 
   @Get()
-  findAll() {
-    return this.seedService.findAll();
+  executedSeed() {
+    return this.seedService.runSeed();
   }
 
  
