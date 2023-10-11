@@ -1,34 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, UploadedFile, UseInterceptors, BadRequestException } from '@nestjs/common';
 import { FilesService } from './files.service';
-import { CreateFileDto } from './dto/create-file.dto';
-import { UpdateFileDto } from './dto/update-file.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { fileFilter } from './helpers/fileFilter';
+
 
 @Controller('files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
-  @Post()
-  create(@Body() createFileDto: CreateFileDto) {
-    return this.filesService.create(createFileDto);
-  }
+ @Post('product')
+ @UseInterceptors( FileInterceptor('file',{fileFilter:fileFilter}) )
+ uploadProductImage( 
+   @UploadedFile() file: Express.Multer.File 
+  ){
+   
+    if(!file){
+      throw new BadRequestException('Make sure that file is an image');
+    }
 
-  @Get()
-  findAll() {
-    return this.filesService.findAll();
+  return {
+    fileName: file.originalname
   }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.filesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFileDto: UpdateFileDto) {
-    return this.filesService.update(+id, updateFileDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.filesService.remove(+id);
-  }
+ }
 }
