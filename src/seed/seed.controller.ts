@@ -12,9 +12,9 @@ export class SeedController {
   
 
   @Get()
-  @Auth()
-  executedSeed( @GetUser() user:User) {
-    return this.seedService.runSeed(user);
+  // @Auth()
+  executedSeed( ) {
+    return this.seedService.runSeed();
   }
 
  
