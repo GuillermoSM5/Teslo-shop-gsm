@@ -62,6 +62,17 @@ export class AuthService {
         token:this.getJwtToken({id:user.id})
       }
   }
+  
+  async checkAuthStatus(user:User){
+    if(!user) throw new UnauthorizedException('Credentials are not valid ')
+
+    return {
+      ...user,
+      token:this.getJwtToken({id:user.id})
+    }
+
+  } 
+
 
   private getJwtToken(payload: JwtPayload){
   
